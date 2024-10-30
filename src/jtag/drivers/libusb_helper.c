@@ -160,18 +160,31 @@ int jtag_libusb_open(const uint16_t vids[], const uint16_t pids[],
 		return ERROR_FAIL;
 
 	cnt = libusb_get_device_list(jtag_libusb_context, &devs);
+	
+	if (cnt <= 0) {
+		LOG_ERROR("could not enumerate USB devices: %s", libusb_strerror(cnt));
+		libusb_exit(ctx);
+		return ERROR_FAIL;
+	}
 
 	for (idx = 0; idx < cnt; idx++) {
 		struct libusb_device_descriptor dev_desc;
+		LOG_DEBUG("device: %d -> get_device_descriptor", idx);
 
 		if (libusb_get_device_descriptor(devs[idx], &dev_desc) != 0)
 			continue;
 
+		LOG_DEBUG("device: %d -> jtag_libusb_match_ids", idx);
+
 		if (!jtag_libusb_match_ids(&dev_desc, vids, pids))
 			continue;
 
+		LOG_DEBUG("device: %d -> jtag_libusb_location_equal", idx);
+
 		if (adapter_usb_get_location() && !jtag_libusb_location_equal(devs[idx]))
 			continue;
+
+		LOG_DEBUG("device: %d -> libusb_open", idx);
 
 		err_code = libusb_open(devs[idx], &libusb_handle);
 
@@ -181,6 +194,8 @@ int jtag_libusb_open(const uint16_t vids[], const uint16_t pids[],
 			continue;
 		}
 
+		LOG_DEBUG("device: %d -> jtag_libusb_match_serial", idx);
+
 		/* Device must be open to use libusb_get_string_descriptor_ascii. */
 		if (serial &&
 				!jtag_libusb_match_serial(libusb_handle, &dev_desc, serial, adapter_get_alternate_serial)) {
@@ -189,12 +204,16 @@ int jtag_libusb_open(const uint16_t vids[], const uint16_t pids[],
 			continue;
 		}
 
+		LOG_DEBUG("device: %d -> string_descriptor_equal", idx);
+
 		if (product &&
 				!string_descriptor_equal(libusb_handle, dev_desc.iProduct, product)) {
 			product_mismatch = true;
 			libusb_close(libusb_handle);
 			continue;
 		}
+
+		LOG_DEBUG("device: %d -> success", idx);
 
 		/* Success. */
 		*out = libusb_handle;
@@ -203,6 +222,7 @@ int jtag_libusb_open(const uint16_t vids[], const uint16_t pids[],
 		product_mismatch = false;
 		break;
 	}
+	
 	if (cnt >= 0)
 		libusb_free_device_list(devs, 1);
 
