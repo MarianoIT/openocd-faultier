@@ -114,8 +114,8 @@ m4_define([ADAPTER_VAR], [enable_[]ADAPTER_ARG($1)])
 m4_define([ADAPTER_OPT], [m4_translit(ADAPTER_ARG($1), [_], [-])])
 
 m4_define([USB1_ADAPTERS],
-	[[tamarin], [Tamarin Cable], [TAMARIN]],
   [[[ftdi], [MPSSE mode of FTDI based devices], [FTDI]],
+  [[tamarin], [Tamarin Cable], [TAMARIN]],
 	[[stlink], [ST-Link Programmer], [HLADAPTER_STLINK]],
 	[[ti_icdi], [TI ICDI JTAG Programmer], [HLADAPTER_ICDI]],
 	[[ulink], [Keil ULINK JTAG Programmer], [ULINK]],
