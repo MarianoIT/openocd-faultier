@@ -482,8 +482,7 @@ static int tamarin_usb_open(void)
 	const uint16_t vids[] = { VID, 0 };
 	const uint16_t pids[] = { PID, 0 };
 
-	if (jtag_libusb_open(vids, pids,
-			&tamarin_handle->usb_handle, NULL) != ERROR_OK) {
+	if (jtag_libusb_open(vids, pids, NULL, &tamarin_handle->usb_handle, NULL) != ERROR_OK) {
 		LOG_ERROR("Failed to open or find the device");
 		return ERROR_FAIL;
 	}
