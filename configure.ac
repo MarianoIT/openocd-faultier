@@ -114,7 +114,8 @@ m4_define([ADAPTER_VAR], [enable_[]ADAPTER_ARG($1)])
 m4_define([ADAPTER_OPT], [m4_translit(ADAPTER_ARG($1), [_], [-])])
 
 m4_define([USB1_ADAPTERS],
-	[[[ftdi], [MPSSE mode of FTDI based devices], [FTDI]],
+	[[tamarin], [Tamarin Cable], [TAMARIN]],
+  [[[ftdi], [MPSSE mode of FTDI based devices], [FTDI]],
 	[[stlink], [ST-Link Programmer], [HLADAPTER_STLINK]],
 	[[ti_icdi], [TI ICDI JTAG Programmer], [HLADAPTER_ICDI]],
 	[[ulink], [Keil ULINK JTAG Programmer], [ULINK]],
@@ -130,6 +131,7 @@ m4_define([USB1_ADAPTERS],
 	[[rlink], [Raisonance RLink JTAG Programmer], [RLINK]],
 	[[usbprog], [USBProg JTAG Programmer], [USBPROG]],
 	[[esp_usb_jtag], [Espressif JTAG Programmer], [ESP_USB_JTAG]]])
+  
 
 m4_define([HIDAPI_ADAPTERS],
 	[[[cmsis_dap], [CMSIS-DAP Compliant Debugger], [CMSIS_DAP_HID]],
