@@ -163,7 +163,7 @@ int jtag_libusb_open(const uint16_t vids[], const uint16_t pids[],
 	
 	if (cnt <= 0) {
 		LOG_ERROR("could not enumerate USB devices: %s", libusb_strerror(cnt));
-		libusb_exit(ctx);
+		libusb_exit(jtag_libusb_context);
 		return ERROR_FAIL;
 	}
 
